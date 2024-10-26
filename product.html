@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Product Details</h1>
+    </header>
+
+    <main>
+        <section class="product-detail">
+            <img src="product1.jpg" alt="Product Image">
+            <h2>Product 1</h2>
+            <p>A high-quality product for your needs.</p>
+            <p><strong>Price: $19.99</strong></p>
+            <button id="buyButton">Buy Now</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Product Store | All Rights Reserved</p>
+    </footer>
+
+    <!-- Include Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('YOUR_PUBLISHABLE_KEY'); // Replace with your Stripe publishable key
+
+        document.getElementById('buyButton').addEventListener('click', () => {
+            fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: 1 }) // Send product ID for dynamic session creation
+            })
+            .then(response => response.json())
+            .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
